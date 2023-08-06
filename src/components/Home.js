@@ -12,11 +12,14 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import User from "./User";
 import MessageArea from "./MessageArea";
 import Message from "./Message";
+import { BsFillTrash3Fill } from "react-icons/bs";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -24,6 +27,7 @@ const Home = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState("");
   const [msgs, setMsgs] = useState([]);
+
   const user1 = auth.currentUser.uid;
   useEffect(() => {
     const usersRef = collection(db, "Users");
@@ -82,6 +86,14 @@ const Home = () => {
       to: user2,
       createdAt: Timestamp.fromDate(new Date()),
       media: url || "",
+    }).then((UserCredential) => {
+      // setTimeout(() => {
+      //   setMsgId(UserCredential.id);
+      //   console.log(msgId);
+      // }, 10000);
+      // const addId = doc(db, "messages", id, "chat", msgId);
+      // await updateDoc(addId, { chatId: msgId });
+      // setMsgId("");
     });
 
     await setDoc(doc(db, "lastMsg", id), {
@@ -93,6 +105,25 @@ const Home = () => {
       unread: true,
     });
     setText("");
+    setImg("");
+  };
+  const deleteChat = async () => {
+    if (window.confirm("Are You sure to delete the Messages?")) {
+      const user2 = chat.uid;
+      const id = user1 > user2 ? `${user1 + user2}` : `${user2 + user1}`;
+      const msgRef = collection(db, "messages", id, "chat");
+
+      // Get all messages in the chat
+      const querySnapshot = await getDocs(msgRef);
+
+      // Delete each message in the chat
+      const deletePromises = querySnapshot.docs.map((doc) =>
+        deleteDoc(doc.ref)
+      );
+      await Promise.all(deletePromises);
+
+      alert("Chats deleted successfully!!");
+    }
   };
   return (
     <div className="home-page">
@@ -110,7 +141,25 @@ const Home = () => {
       <div className="message-pager">
         {chat ? (
           <>
-            <div className="name text-center">{chat.userName}</div>
+            <div className="name text-center text-light d-flex">
+              <div className="profile-img w-25  text-start ms-2">
+                <img
+                  src={chat.avatar}
+                  alt=""
+                  style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+                />
+              </div>
+
+              <p className="w-50 pt-2">{chat.userName}</p>
+              {msgs.length ? (
+                <i
+                  className="deleteMsg text-end  me-3 pt-2 text-danger w-25"
+                  onClick={deleteChat}
+                >
+                  <BsFillTrash3Fill />
+                </i>
+              ) : null}
+            </div>
             <div className="messages">
               {msgs.length
                 ? msgs.map((msg, i) => (
