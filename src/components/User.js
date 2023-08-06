@@ -30,11 +30,7 @@ const User = ({ user1, user, selectUser, chat }) => {
             <small className="unread bg-danger text-light px-1">New</small>
           )}
         </div>
-        <div
-          className={`user-status  ${
-            user.isOnline ? "text-success" : "text-danger"
-          }`}
-        >
+        <div className={`user-status  ${user.isOnline ? "success" : "danger"}`}>
           <BsCircleFill />
         </div>
       </div>
