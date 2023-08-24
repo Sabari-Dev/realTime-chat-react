@@ -70,6 +70,15 @@ const SignIn = () => {
       <Button variant="primary" type="submit">
         {loading ? "loading..." : "LogIn"}
       </Button>
+   <div className="test-acc bg-light mt-3 p-2">
+        <h4>Use this account to test.</h4>
+        <p className="text-danger">
+          Email : <span className="text-dark">test@gmail.com</span>
+        </p>
+        <p className="text-danger">
+          Password : <span className="text-dark">Test@1234</span>
+        </p>
+      </div>
     </Form>
   );
 };
