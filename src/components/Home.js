@@ -20,6 +20,7 @@ import User from "./User";
 import MessageArea from "./MessageArea";
 import Message from "./Message";
 import { BsFillTrash3Fill } from "react-icons/bs";
+import image from "../profile.jpg";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -111,12 +112,12 @@ const Home = () => {
     if (window.confirm("Are You sure to delete the Messages?")) {
       const user2 = chat.uid;
       const id = user1 > user2 ? `${user1 + user2}` : `${user2 + user1}`;
+      //delete last msg
+      const lastMsgDocRef = doc(db, "lastMsg", id);
+      await deleteDoc(lastMsgDocRef);
+      //delete chat
       const msgRef = collection(db, "messages", id, "chat");
-
-      // Get all messages in the chat
       const querySnapshot = await getDocs(msgRef);
-
-      // Delete each message in the chat
       const deletePromises = querySnapshot.docs.map((doc) =>
         deleteDoc(doc.ref)
       );
@@ -144,7 +145,7 @@ const Home = () => {
             <div className="name text-center text-light d-flex">
               <div className="profile-img w-25  text-start ms-2">
                 <img
-                  src={chat.avatar}
+                  src={chat ? chat.avatar : image}
                   alt=""
                   style={{ height: "50px", width: "50px", borderRadius: "50%" }}
                 />
