@@ -44,7 +44,7 @@ const SignIn = () => {
     }
   };
   return (
-    <Form className="signUp mx-auto p-4 mt-5 " onSubmit={handleSubmit}>
+    <Form className="signUp mx-auto p-4 mt-2 " onSubmit={handleSubmit}>
       <h2 className="text-center">SignIn</h2>
       <Form.Group className="mb-3" controlId="formGroupEmail">
         <Form.Label>Email address</Form.Label>
@@ -70,7 +70,8 @@ const SignIn = () => {
       <Button variant="primary" type="submit">
         {loading ? "loading..." : "LogIn"}
       </Button>
-   <div className="test-acc bg-light mt-3 p-2">
+
+      <div className="test-acc bg-light mt-3 p-2">
         <h4>Use this account to test.</h4>
         <p className="text-danger">
           Email : <span className="text-dark">test@gmail.com</span>
