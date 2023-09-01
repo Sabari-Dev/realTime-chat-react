@@ -7,6 +7,7 @@ import { Timestamp, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { toast } from "react-hot-toast";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -33,7 +34,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUser({ ...user, loading: true, error: null });
-    console.log(user);
+    // console.log(user);
 
     try {
       const validationErrors = validateForm();
@@ -44,7 +45,7 @@ const SignUp = () => {
           password
         );
         const userId = result.user.uid;
-        console.log(userId);
+        // console.log(userId);
         setDoc(doc(db, "Users", userId), {
           uid: userId,
           ...user,
@@ -58,6 +59,7 @@ const SignUp = () => {
           loading: false,
           error: null,
         });
+        toast.success("User registration completed!!");
         navigate("/signIn");
       } else {
         setErrors(validationErrors);
@@ -67,8 +69,9 @@ const SignUp = () => {
         setUser({ ...user, loading: false });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       setUser({ ...user, error: `${err}` });
+      toast.error(err.message);
     }
   };
   const validateForm = () => {
