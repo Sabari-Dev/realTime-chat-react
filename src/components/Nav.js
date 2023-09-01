@@ -10,6 +10,7 @@ import Image from "react-bootstrap/Image";
 import { AuthContext } from "../context/auth";
 import logo from "../logo.png";
 import profileImg from "../profile.jpg";
+import toast from "react-hot-toast";
 
 const Nav = () => {
   const { user } = useContext(AuthContext);
@@ -17,19 +18,22 @@ const Nav = () => {
   const [userProfile, setUserProfile] = useState("");
 
   useEffect(() => {
-    const getProfile = async () => {
-      const docRef = doc(db, "Users", auth.currentUser.uid);
-      const docSnap = await getDoc(docRef);
-      // console.log(docSnap.data());
-      setUserProfile(docSnap.data().avatar);
-    };
-    getProfile();
-  }, [userProfile]);
+    if (user) {
+      const getProfile = async () => {
+        const docRef = doc(db, "Users", auth.currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        // console.log(docSnap.data());
+        setUserProfile(docSnap.data().avatar);
+      };
+      getProfile();
+    }
+  }, [userProfile, user]);
   const handleSignOut = async () => {
     await updateDoc(doc(db, "Users", auth.currentUser.uid), {
       isOnline: false,
     });
     await signOut(auth);
+    toast.success("Logging out successfully!!");
     navigate("/signIn");
   };
   return (
@@ -74,7 +78,7 @@ const Nav = () => {
           ) : (
             <>
               <Link to="/">
-                <Button variant="primary" className="mx-2 px-3">
+                <Button variant="outline-primary" className="mx-2 px-3">
                   SignUp
                 </Button>
               </Link>
