@@ -16,6 +16,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { deleteUser } from "firebase/auth";
+import { toast } from "react-hot-toast";
 
 const Profile = () => {
   const [img, setImg] = useState("");
@@ -78,6 +79,7 @@ const Profile = () => {
           avatar: "",
           avatarPath: "",
         });
+        toast.success("profile deleted.");
         navigate("/home");
       }
     } catch (error) {
@@ -88,7 +90,7 @@ const Profile = () => {
     if (window.confirm("Are you sure delete this account?")) {
       await deleteDoc(doc(db, "Users", auth.currentUser.uid));
       deleteUser(auth.currentUser.uid).then(() => {
-        alert("user deleted successfully!!");
+        toast.success("user deleted successfully!!");
         navigate("/");
       });
     }
@@ -109,14 +111,15 @@ const Profile = () => {
         gender: editedGender,
         state: editedState,
       }));
+      toast.success("user details updated!!");
       handleClose();
     } catch (error) {
       console.log(error);
     }
   };
   return user ? (
-    <section className="w-50 sm-ms-2 l-mx-auto ">
-      <div className="profile-page text-center">
+    <section className=" sm-w-75 sm-m-2 w-50 mx-auto ">
+      <div className="profile-page text-center ">
         <div className="img-area ">
           <img
             src={user.avatar || image}
