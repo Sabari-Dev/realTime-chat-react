@@ -7,11 +7,13 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AuthProvider from "./context/auth";
 import Profile from "./components/Profile";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+     <Toaster />
         <Nav />
         <Routes>
           <Route path="/home" element={<Home />} />
