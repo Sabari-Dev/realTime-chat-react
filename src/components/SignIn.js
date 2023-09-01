@@ -5,6 +5,7 @@ import { auth, db } from "../Config/Config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { updateDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const [logUser, setLogUser] = useState({
@@ -27,7 +28,7 @@ const SignIn = () => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const userId = result.user.uid;
-      console.log(userId);
+      // console.log(userId);
       updateDoc(doc(db, "Users", userId), {
         isOnline: true,
       });
@@ -37,10 +38,12 @@ const SignIn = () => {
         loading: false,
         error: null,
       });
+      toast.success("logged in successfully!!");
       navigate("/home");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       setLogUser({ ...logUser, error: `${err}` });
+      toast.error(err.message);
     }
   };
   return (
@@ -66,7 +69,6 @@ const SignIn = () => {
           onChange={handleChange}
         />
       </Form.Group>
-      {error ? <p className="text-danger">{error}</p> : null}
       <Button variant="primary" type="submit">
         {loading ? "loading..." : "LogIn"}
       </Button>
