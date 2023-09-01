@@ -21,6 +21,7 @@ import MessageArea from "./MessageArea";
 import Message from "./Message";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import image from "../profile.jpg";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -123,7 +124,7 @@ const Home = () => {
       );
       await Promise.all(deletePromises);
 
-      alert("Chats deleted successfully!!");
+     toast.success("Chats deleted successfully!!");
     }
   };
   return (
